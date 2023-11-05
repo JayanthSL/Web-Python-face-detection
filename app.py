@@ -11,6 +11,7 @@ import joblib
 # Defining Flask App
 app = Flask(__name__)
 
+
 # Number of images to take for each user
 nimgs = 50
 
@@ -97,9 +98,31 @@ def add_attendance(name):
 
 # Our main page
 @app.route('/')
+def Homes():
+    names, rolls, times, l = extract_attendance()
+    return render_template('index.html', names=names, rolls=rolls, times=times, l=l, totalreg=totalreg())
+@app.route('/index.html')
+def index():
+    names, rolls, times, l = extract_attendance()
+    return render_template('index.html', names=names, rolls=rolls, times=times, l=l, totalreg=totalreg())
+
+@app.route('/home.html')
 def home():
     names, rolls, times, l = extract_attendance()
     return render_template('home.html', names=names, rolls=rolls, times=times, l=l, totalreg=totalreg())
+
+@app.route('/about.html')
+def about():
+    names, rolls, times, l = extract_attendance()
+    return render_template('about.html', names=names, rolls=rolls, times=times, l=l, totalreg=totalreg())
+@app.route('/excel.html')
+def Excel():
+    names, rolls, times, l = extract_attendance()
+    return render_template('excel.html', names=names, rolls=rolls, times=times, l=l, totalreg=totalreg())
+@app.route('/mail.html')
+def mail():
+    names, rolls, times, l = extract_attendance()
+    return render_template('mail.html', names=names, rolls=rolls, times=times, l=l, totalreg=totalreg())
 
 
 # Our main Face Recognition functionality. 
@@ -107,7 +130,7 @@ def home():
 @app.route('/start', methods=['GET'])
 def start():
     if 'face_recognition_model.pkl' not in os.listdir('static'):
-        return render_template('home.html', totalreg=totalreg(), mess='There is no trained model in the static folder. Please add a new face to continue.')
+        return render_template('index.html', totalreg=totalreg(), mess='There is no trained model in the static folder. Please add a new face to continue.')
 
     ret = True
     cap = cv2.VideoCapture(0)
@@ -128,7 +151,7 @@ def start():
     cap.release()
     cv2.destroyAllWindows()
     names, rolls, times, l = extract_attendance()
-    return render_template('home.html', names=names, rolls=rolls, times=times, l=l, totalreg=totalreg())
+    return render_template('index.html', names=names, rolls=rolls, times=times, l=l, totalreg=totalreg())
 
 
 # A function to add a new user.
@@ -164,7 +187,7 @@ def add():
     print('Training Model')
     train_model()
     names, rolls, times, l = extract_attendance()
-    return render_template('home.html', names=names, rolls=rolls, times=times, l=l, totalreg=totalreg())
+    return render_template('index.html', names=names, rolls=rolls, times=times, l=l, totalreg=totalreg())
 
 
 # Our main function which runs the Flask App
