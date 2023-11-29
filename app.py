@@ -145,7 +145,7 @@ def start():
             add_attendance(identified_person)
             cv2.putText(frame, f'{identified_person}', (x+5, y-5),
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
-        cv2.imshow('Attendance', frame)
+        # cv2.imshow('Attendance', frame)
         if cv2.waitKey(1) == 27:
             break
     cap.release()
@@ -166,7 +166,7 @@ def add():
     i, j = 0, 0
     cap = cv2.VideoCapture(0)
     while 1:
-        _, frame = cap.read()
+        frame = cap.read()
         faces = extract_faces(frame)
         for (x, y, w, h) in faces:
             cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 20), 2)
@@ -180,6 +180,7 @@ def add():
         if j == nimgs*5:
             break
         cv2.imshow('Adding new User', frame)
+
         if cv2.waitKey(1) == 27:
             break
     cap.release()
@@ -192,4 +193,4 @@ def add():
 
 # Our main function which runs the Flask App
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False,host='0.0.0.0')
